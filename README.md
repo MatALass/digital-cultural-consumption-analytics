@@ -43,7 +43,7 @@ The dataset is provided in CSV format and processed using Python data analysis t
 
 ```
 
-Data-viz-dashboard/
+dataviz-dashboard/
 │
 ├── app.py                 # Main Streamlit application
 ├── requirements.txt       # Python dependencies
