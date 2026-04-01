@@ -1,0 +1,3 @@
+[console_scripts]
+dcca-build-analytics = scripts.build_analytics_dataset:main
+dcca-dashboard = dashboard.main:run_app

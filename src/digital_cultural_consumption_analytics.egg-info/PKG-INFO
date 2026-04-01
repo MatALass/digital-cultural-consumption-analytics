@@ -1,3 +1,18 @@
+Metadata-Version: 2.4
+Name: digital-cultural-consumption-analytics
+Version: 5.0.0
+Summary: Survey-based behavioral analytics dashboard for digital cultural consumption in France.
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: streamlit>=1.40
+Requires-Dist: pandas>=2.2
+Requires-Dist: numpy>=1.26
+Requires-Dist: plotly>=5.24
+Requires-Dist: openpyxl>=3.1
+Provides-Extra: dev
+Requires-Dist: pytest>=8.2; extra == "dev"
+Requires-Dist: ruff>=0.6; extra == "dev"
+
 # Digital Cultural Consumption Analytics
 
 A portfolio-grade **Streamlit analytics application** built from the real Excel survey files in this repository.
