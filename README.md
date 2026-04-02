@@ -91,54 +91,54 @@ This is more defensible than decorative ML on top of a survey structure that doe
 
 ## Dashboard sections
 
-### 📌 Executive Overview
+### Executive Overview
 - KPI board with quantiles, monetization, engagement, and risk signals
 - filtered view vs full population benchmark table
 - segment opportunity table for conversion headroom
 - spending distribution and engagement progression by spending quintile
 
-### 👥 Audience & Context
+### Audience & Context
 - spending dispersion by generation
 - generation → family stage → segment composition
 - urbanity vs content breadth
 - profession concentration
 - audience deep-dive with filtered vs full-population share context
 
-### 🛜 Behavior & Access
+### Behavior & Access
 - access style mix
 - legality self-positioning
 - segment-level risk radar
 - VPN / DNS / cracked-app behavioral intensity
 - generation × access-style share
 
-### 💸 Monetization
+### Monetization
 - conversion funnel
 - segment × value-tier structure
 - engagement distribution by value tier
 - value-tier × access-style share
 - spending percentiles by segment
 
-### 🧩 Raw Modules
+### Raw Modules
 - content-category breadth
 - device diversity
 - illicit-method breadth
 - legal value perception
 - content breadth vs spending
 
-### 🎯 Segmentation
+### Segmentation
 - segment distribution
 - generation × segment mix
 - average score profile by segment
 - risk vs engagement scatter
 - segment summary and opportunity prioritization
 
-### 🔎 Survey Explorer
+### Survey Explorer
 - analytical missingness
 - datamap variable search
 - text-label search
 - raw-column explorer with preview and distribution
 
-### 🧪 Methodology
+### Methodology
 - feature engineering
 - segment logic
 - limitations
