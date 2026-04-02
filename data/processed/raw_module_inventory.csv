@@ -1,0 +1,12 @@
+module,pattern,column_count,example_columns
+QBU1 paid/free content matrix,^QBU1_r\d+$,14,"QBU1_r1, QBU1_r2, QBU1_r3, QBU1_r4, QBU1_r5, QBU1_r6, QBU1_r7, QBU1_r8"
+QBU5a devices matrix,^QBU5a_r\d+_c\d+$,84,"QBU5a_r1_c1, QBU5a_r1_c2, QBU5a_r1_c3, QBU5a_r1_c4, QBU5a_r1_c5, QBU5a_r1_c6, QBU5a_r2_c1, QBU5a_r2_c2"
+QBU10a illegal access means,^QBU10a_\d+$,10,"QBU10a_1, QBU10a_2, QBU10a_3, QBU10a_4, QBU10a_5, QBU10a_6, QBU10a_7, QBU10a_8"
+QBU10b illegal access means,^QBU10b_\d+$,10,"QBU10b_1, QBU10b_2, QBU10b_3, QBU10b_4, QBU10b_5, QBU10b_6, QBU10b_7, QBU10b_8"
+QBU10c illegal access means,^QBU10c_\d+$,10,"QBU10c_1, QBU10c_2, QBU10c_3, QBU10c_4, QBU10c_5, QBU10c_6, QBU10c_7, QBU10c_8"
+QBU10d illegal access means,^QBU10d_\d+$,7,"QBU10d_1, QBU10d_2, QBU10d_3, QBU10d_4, QBU10d_5, QBU10d_6, QBU10d_7"
+QBU11 illegal frequency,^QBU11_r\d+$,4,"QBU11_r1, QBU11_r2, QBU11_r3, QBU11_r4"
+QBU11B illicit methods matrix,^QBU11B_r\d+_c\d+$,112,"QBU11B_r1_c1, QBU11B_r2_c1, QBU11B_r3_c1, QBU11B_r4_c1, QBU11B_r5_c1, QBU11B_r6_c1, QBU11B_r7_c1, QBU11B_r8_c1"
+QBU12 stream ripping,^QBU12_r\d+$,3,"QBU12_r1, QBU12_r2, QBU12_r3"
+QBOL3 legal offer advantages,^QBOL3_\d+$,13,"QBOL3_1, QBOL3_2, QBOL3_3, QBOL3_4, QBOL3_5, QBOL3_6, QBOL3_7, QBOL3_8"
+QBOL4 legal motivations,^QBOL4_\d+$,14,"QBOL4_1, QBOL4_2, QBOL4_3, QBOL4_4, QBOL4_5, QBOL4_6, QBOL4_7, QBOL4_8"
