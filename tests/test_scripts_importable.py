@@ -1,10 +1,10 @@
-"""Verify that the scripts package is importable (requires scripts/__init__.py)."""
 from __future__ import annotations
 
 import importlib
 
 
-def test_scripts_package_importable() -> None:
-    """scripts.__init__.py must exist for the dcca-build-analytics entry point to work."""
-    mod = importlib.import_module('scripts.build_analytics_dataset')
-    assert callable(getattr(mod, 'main', None))
+def test_build_analytics_entry_module_importable() -> None:
+    """The analytics dataset build command module must be importable."""
+    mod = importlib.import_module("dashboard.cli.build_analytics_dataset")
+    assert mod is not None
+    assert hasattr(mod, "main")

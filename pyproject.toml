@@ -24,6 +24,7 @@ dev = [
 
 [project.scripts]
 dcca-dashboard = "dashboard.main:run_app"
+dcca-build-analytics = "dashboard.cli.build_analytics_dataset:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

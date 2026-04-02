@@ -4,6 +4,7 @@ import pandas as pd
 
 from dashboard.utils.transforms import build_analytics_dataset
 
+
 def test_build_analytics_dataset_adds_raw_features():
     processed = pd.DataFrame(
         {
@@ -13,7 +14,10 @@ def test_build_analytics_dataset_adds_raw_features():
             "agglomeration_type": ["Paris et grandes métropoles", "Rural isolé"],
             "personal_situation": ["étudiant", "actif"],
             "main_profession": ["Prof", "Ingénieur"],
-            "employment_status": ["Salarié du privé ou association", "Salarié de l’État"],
+            "employment_status": [
+                "Salarié du privé ou association",
+                "Salarié de l’État",
+            ],
             "internet_frequency": ["Plusieurs fois par jour", "1 à 2 fois par semaine"],
             "cultural_frequency": ["Tous les jours ou presque", "1 à 3 fois par mois"],
             "legality_type": ["Autant", "Légale"],

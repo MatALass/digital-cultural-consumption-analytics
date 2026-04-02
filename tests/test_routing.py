@@ -1,4 +1,5 @@
 """Ensure every page key declared in PAGES has a renderer in the dispatch table."""
+
 from __future__ import annotations
 
 from dashboard.config import PAGES
@@ -14,4 +15,6 @@ def test_all_pages_have_unique_keys() -> None:
 
 def test_all_pages_keys_are_non_empty_strings() -> None:
     for label, key in PAGES.items():
-        assert isinstance(key, str) and key, f"Page key for '{label}' is empty or not a string"
+        assert isinstance(key, str) and key, (
+            f"Page key for '{label}' is empty or not a string"
+        )
