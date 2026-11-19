@@ -1,204 +1,105 @@
 # Digital Cultural Consumption Analytics
 
-A portfolio-grade **Streamlit analytics application** built from the real Excel survey files in this repository.
+Streamlit dashboard on a 2024 French survey about digital cultural consumption (films, series, music, games, books): who consumes what, how much they spend, how they access content (legal, free, paid, illegal) and which groups have room to convert to paid offers.
 
-This improved final version is stronger on the points that matter in a serious portfolio review:
-- **cleaner decision flow** with filtered-vs-baseline benchmark context
-- **better UX utility** through active filter summaries and export of the filtered analytical layer
-- **broader behavioral reading** with access-style mix analysis by generation and value tier
-- **safer exploration flow** with explicit empty-state handling and a corrected missingness chart
-- **stronger maintainability** through clearer sidebar logic, reusable metrics helpers, and additional tests
+## Data
 
-The application analyzes digital cultural consumption in France through four decision lenses:
-- **audience structure**
-- **engagement intensity**
-- **monetization potential**
-- **risk-heavy access behavior**
+| File | Content |
+|---|---|
+| `data/raw/2024-barometre-consommation.xlsx` | Raw survey export: about 5,040 respondents, 1,518 columns |
+| `data/raw/2024-datamap.xlsx` | Questionnaire map: variable codes and labels |
+| `data/processed/data.xlsx` | Curated subset: 5,040 rows, 23 readable columns (age, region, spending, legality, VPN use...) |
 
-It combines a curated analytical export with broader raw barometer modules to produce a dashboard that is more useful than a basic descriptive survey app, while staying technically honest about the integration limits.
+`data/processed/analytics_dataset_generated.csv` is the output of the pipeline below.
 
----
+## Method
 
-## What is materially better in this final improved version
+1. **Curated layer.** `data.xlsx` is the main table. Columns are renamed to English and typed; age is turned into age groups and generations, household and children into a family stage.
+2. **Raw enrichment.** Selected raw modules add counts per respondent: paid vs free content categories, device diversity, illicit channels, illicit methods, stream ripping, perceived advantages of legal offers, motivations for legal consumption.
+3. **Scores** (all in `src/dashboard/utils/transforms.py`):
 
-Compared with the previous delivered zip, this version adds practical improvements that are actually useful:
+   | Score | Formula |
+   |---|---|
+   | `engagement_score` | 0.45 × internet frequency + 0.35 × cultural frequency + 0.20 × spends something (each part scaled to 0-1) |
+   | `monetization_score` | 0.50 × payment orientation + 0.20 × paid access + 0.30 × spends something |
+   | `risk_behavior_score` | sum of VPN, DNS settings, illegal download and cracked apps scores |
+   | `raw_risk_intensity_score` | illicit channels + illicit methods + stream ripping |
+   | `content_depth_score` | 0.45 × content categories + 0.25 × devices + 0.30 × answer coverage |
 
-- **active filter summary in the sidebar** instead of making the user infer the state mentally
-- **download button for the filtered analytics dataset** for handoff and validation
-- **baseline comparison table** in the executive overview to avoid reading the filtered slice in isolation
-- **segment opportunity table** to surface conversion headroom directly
-- **generation × access-style share chart** in the behavior section
-- **value-tier × access-style share chart** in the monetization section
-- **better audience deep-dive** with filtered-share vs full-population-share context
-- **correct missingness visualization** in the survey explorer
-- **empty-filter safety** so the dashboard fails gracefully instead of silently producing nonsense
-- **cleanup of the distributable zip** with no cached test artifacts included
+4. **Value tiers** from monthly spending: non-spender, then low, mid, high and top spender split at the median, Q3 and P90 of spending.
+5. **Segments**, rule-based and checked in this order:
 
----
+   | Segment | Rule |
+   |---|---|
+   | Premium Legal Users | spending ≥ Q3, legal and paid access, risk score ≤ 1 |
+   | Hybrid Monetizers | spending ≥ Q3 and at least one illicit channel |
+   | Heavy Free Users | no spending, engagement ≥ 0.65, 3+ content categories |
+   | Risk-Oriented Free Users | risk score ≥ 4 and 2+ illicit methods |
+   | Casual Value Seekers | some spending, engagement < 0.65 |
+   | Low Engagement Users | everyone else |
 
-## Data sources
+Rules were preferred to clustering: the segments stay readable and each one maps to a business question (who already pays, who could pay, who is a piracy risk).
 
-Raw inputs used by the project:
-- `data/raw/2024-barometre-consommation.xlsx`
-- `data/raw/2024-datamap.xlsx`
-- `data/processed/data.xlsx`
+## Results
 
-Generated helper artifacts:
-- `data/processed/raw_module_inventory.csv`
-- `data/processed/datamap_module_excerpt.csv`
-- `data/processed/analytics_dataset_generated.csv`
+On the full population (5,040 respondents):
 
----
+- 42.7 % spend something each month; median spending is 0 € and Q3 is 20 €.
+- 8.4 % are engaged non-spenders (engagement ≥ 0.65, no spending, 2+ content categories): the clearest conversion target.
+- Segments: Heavy Free Users 6.9 %, Hybrid Monetizers 6.4 %, Premium Legal Users 3.5 %, Casual Value Seekers 1.6 %, Risk-Oriented Free Users 1.3 %, Low Engagement Users 80.3 %.
 
-## Analytical approach
+The large "Low Engagement" group is partly an artefact of missing answers: the legality question is empty for 42 % of rows and the free/paid question for 59 %, so many respondents cannot be placed in a more specific segment.
 
-### 1. Curated business layer
-`data.xlsx` is kept as the primary interpretable layer.
+## Dashboard
 
-That is the right architectural decision here because it preserves a business-readable subset of the survey and avoids pretending that the project fully reconstructs the entire raw questionnaire semantics.
+| Page | Content |
+|---|---|
+| Executive Overview | KPIs, filtered view vs full population, segment opportunity table, spending distribution |
+| Audience & Context | spending by generation, family stage, urbanity, profession |
+| Behavior & Access | access style mix, legality, risk radar by segment, VPN / DNS / cracked apps |
+| Monetization | conversion funnel, value tiers, access style by value tier |
+| Raw Modules | content breadth, devices, illicit methods, legal value perception |
+| Segmentation | segment mix, score profiles, risk vs engagement |
+| Survey Explorer | missing values, datamap search, raw column preview |
+| Methodology | scores, segment rules, limits |
 
-### 2. Raw module enrichment
-The raw barometer is used to derive broader feature blocks from selected modules such as:
-- paid vs free content matrix
-- device diversity
-- illicit access channels
-- illicit methods breadth
-- stream-ripping behavior
-- legal-offer advantages
-- legal-consumption motivations
+The sidebar filters every page, shows the active filters and exports the filtered table as CSV.
 
-### 3. Interpretable engineered scores
-The project builds explainable composite signals such as:
-- `engagement_score`
-- `monetization_score`
-- `risk_behavior_score`
-- `content_depth_score`
-- `raw_risk_intensity_score`
-- `legal_value_perception_score`
-
-### 4. Rule-based segmentation
-The final layer turns those signals into interpretable consumer segments:
-- Premium Legal Users
-- Hybrid Monetizers
-- Heavy Free Users
-- Risk-Oriented Free Users
-- Casual Value Seekers
-- Low Engagement Users
-
-This is more defensible than decorative ML on top of a survey structure that does not justify it.
-
----
-
-## Dashboard sections
-
-### Executive Overview
-- KPI board with quantiles, monetization, engagement, and risk signals
-- filtered view vs full population benchmark table
-- segment opportunity table for conversion headroom
-- spending distribution and engagement progression by spending quintile
-
-### Audience & Context
-- spending dispersion by generation
-- generation → family stage → segment composition
-- urbanity vs content breadth
-- profession concentration
-- audience deep-dive with filtered vs full-population share context
-
-### Behavior & Access
-- access style mix
-- legality self-positioning
-- segment-level risk radar
-- VPN / DNS / cracked-app behavioral intensity
-- generation × access-style share
-
-### Monetization
-- conversion funnel
-- segment × value-tier structure
-- engagement distribution by value tier
-- value-tier × access-style share
-- spending percentiles by segment
-
-### Raw Modules
-- content-category breadth
-- device diversity
-- illicit-method breadth
-- legal value perception
-- content breadth vs spending
-
-### Segmentation
-- segment distribution
-- generation × segment mix
-- average score profile by segment
-- risk vs engagement scatter
-- segment summary and opportunity prioritization
-
-### Survey Explorer
-- analytical missingness
-- datamap variable search
-- text-label search
-- raw-column explorer with preview and distribution
-
-### Methodology
-- feature engineering
-- segment logic
-- limitations
-- pipeline summary
-
----
-
-## Project structure
-
-```text
-.
-├── app.py
-├── data/
-│   ├── raw/
-│   └── processed/
-├── scripts/
-│   └── __init__.py
-├── src/
-│   └── dashboard/
-│       ├── sections/
-│       └── utils/
-├── tests/
-└── .github/workflows/
-```
-
----
-
-## Run locally
+## Run it
 
 ```bash
 pip install -e ".[dev]"
-streamlit run app.py
+streamlit run app.py          # or: dcca-dashboard
+dcca-build-analytics          # rewrites data/processed/analytics_dataset_generated.csv
 ```
 
-Alternative entry point:
-
-```bash
-dcca-dashboard
-```
-
-To export the generated analytics table:
-
-```bash
-python scripts/build_analytics_dataset.py
-```
-
----
-
-## Quality checks
+Checks (also run in CI on Python 3.11 and 3.12):
 
 ```bash
 ruff check .
 pytest -q
 ```
 
----
+## Project structure
 
-## Technical note on honesty
+```text
+app.py                        Streamlit entry point
+src/dashboard/
+  config.py                   paths, column mapping, score maps, pages
+  filters.py                  sidebar filters
+  sections/                   one module per page
+  utils/                      io, transforms (scores, segments), metrics, viz
+  cli/build_analytics_dataset.py
+tests/                        filters, metrics, transforms, routing, viz
+data/raw/, data/processed/
+```
 
-The project uses conservative row-order alignment between the curated analytical file and the raw barometer because the shared business key is not exposed in the processed export.
+## Limits
 
-That is acceptable for a portfolio project as long as it is stated clearly.
-It is **not** equivalent to a production-grade keyed integration.
+- The curated file and the raw export share no respondent key. They are aligned on row order, which assumes both files keep the original order. This is not a keyed join.
+- Score weights and segment thresholds are set by hand, not estimated.
+- The survey is declarative: illegal consumption is probably under-reported.
+
+## License
+
+MIT
