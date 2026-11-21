@@ -9,7 +9,25 @@ from __future__ import annotations
 
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+def _find_project_root() -> Path:
+    """Retrouve la racine du dépôt, indépendamment de l'installation du package."""
+
+    current = Path.cwd().resolve()
+
+    for candidate in (current, *current.parents):
+        if (
+            (candidate / "pyproject.toml").is_file()
+            and (candidate / "data").is_dir()
+        ):
+            return candidate
+
+    raise RuntimeError(
+        "Impossible de localiser la racine du projet "
+        "depuis le répertoire courant."
+    )
+
+
+PROJECT_ROOT = _find_project_root()
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_SURVEY_PATH = DATA_DIR / "raw" / "2024-barometre-consommation.xlsx"
 DATAMAP_PATH = DATA_DIR / "raw" / "2024-datamap.xlsx"
