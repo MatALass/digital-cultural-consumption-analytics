@@ -14,11 +14,8 @@ build/
 venv/
 env/
 
-# Data (keep structure, ignore large files from VCS if needed)
-# data/raw/*.xlsx  # uncomment if raw data should not be versioned
-
 # Streamlit
-.streamlit/
+.streamlit/secrets.toml
 
 # Editors
 .vscode/
@@ -34,3 +31,7 @@ Thumbs.db
 .coverage
 htmlcov/
 .pytest_cache/
+
+# Outils
+.ruff_cache/
+.ipynb_checkpoints/

@@ -4,34 +4,56 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "digital-cultural-consumption-analytics"
-version = "5.1.0"
-description = "Survey-based behavioral analytics dashboard for digital cultural consumption in France."
+version = "6.0.0"
+description = "Analyse du Baromètre 2024 de l'Arcom sur la consommation de contenus culturels en ligne : segmentation, intervalles de confiance et dashboard Streamlit."
 readme = "README.md"
 requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Mathieu Alassoeur" }]
 dependencies = [
-  "streamlit>=1.40",
-  "pandas>=2.2",
+  "streamlit>=1.40,<2",
+  "pandas>=2.2,<4",
   "numpy>=1.26",
-  "plotly>=5.24",
+  "plotly>=5.24,<7",
+  "pyarrow>=15",
+  "scipy>=1.12",
   "openpyxl>=3.1",
 ]
 
 [project.optional-dependencies]
 dev = [
   "pytest>=8.2",
-  "ruff>=0.6",
+  "ruff==0.8.6",
+  "jupytext>=1.16",
+  "nbconvert>=7.16",
+  "ipykernel>=6.29",
+  "matplotlib>=3.8",
 ]
 
 [project.scripts]
-dcca-dashboard = "dashboard.main:run_app"
-dcca-build-analytics = "dashboard.cli.build_analytics_dataset:main"
-
-[tool.setuptools]
-package-dir = {"" = "src"}
+dcca = "dcca.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+dcca = ["py.typed"]
+
 [tool.pytest.ini_options]
-pythonpath = ["src"]
 testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["notebooks/*.ipynb"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+ignore = ["E501", "RUF001", "RUF002", "RUF003"]  # longueur gérée par ruff format ; typographie française
+
+[tool.ruff.lint.isort]
+known-first-party = ["dcca"]
+
+[tool.ruff.lint.per-file-ignores]
+"notebooks/*.py" = ["B018"]  # une expression seule en fin de cellule sert à l'afficher
